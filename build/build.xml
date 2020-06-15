@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<project name="Miniskewl" description="Miniskewl CSS/JS aggregator and minifier plug-in for Joomla!" default="all" >
+	<property file="./build.properties" />
+	<!-- Default properties, set only if not already assigned in the build.properties file -->
+	<property name="dirs.root" value=".." />
+	<property name="dirs.plugin" value="../plugin" />
+	<property name="dirs.release" value="../release" />
+	<property name="version" value="svn" />
+
+	<taskdef name="zipme" classname="phingext.ZipmeTask" />
+	<taskdef name="svnversion" classname="phingext.SvnVersionTask" />
+
+	
+	<!--
+	====================================================================================================
+	Tasks - General
+	====================================================================================================
+	-->
+	
+	<target name="all" description="Makes everything"
+		depends="svn">
+	</target>
+
+	<target name="svn" description="Makes only packages, not the documentation"
+		depends="new-release,setup-properties,plugin">
+	</target>
+
+	<target name="new-release" description="Recreate the release directory">
+		<!-- Recreate the release directory -->
+		<delete dir="${dirs.release}" quiet="yes" includeemptydirs="true" />
+		<mkdir dir="${dirs.release}" />
+	</target>
+	
+	<target name="setup-properties" description="Set up version and build properties">
+		<!-- Initialize the build.date timestamp -->
+		<tstamp>
+			<format property="build.date" pattern="%Y-%m-%d" />
+		</tstamp>
+
+		<!-- Initialize the version if it's not set -->
+		<if>
+			<equals arg1="${version}" arg2="svn" />
+			<then>
+				<svnversion workingcopy="${dirs.root}" propertyname="svn.lastrevision" />
+				<property name="version" value="svn${svn.lastrevision}" override="true" />
+			</then>
+		</if>
+	</target>
+
+	<!--
+	====================================================================================================
+	Tasks - Joomla! packages
+	====================================================================================================
+	-->
+	
+	<target name="plugin" description="Builds the Miniskewl plugin">
+		<copy file="./templates/miniskewl.xml" tofile="${dirs.plugin}/miniskewl.xml" overwrite="true">
+			<filterchain id="standard-tokens">
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<zipme basedir="${dirs.plugin}" destfile="${dirs.release}/plg_miniskewl-${version}.zip" includeemptydirs="true">
+			<fileset dir="${dirs.plugin}">
+				<include name="**" />
+			</fileset>
+		</zipme>
+	</target>
+	
+</project>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install group="system" type="plugin" version="1.5.0" method="upgrade">
+	<name>System - Miniskewl CSS and JS aggregator/minifier</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<version>1.0</version>
+	<creationDate>2010-08-15</creationDate>
+	<copyright>Copyright (c)2010 Nicholas K. Dionysopoulos / www.dionysopoulos.me</copyright>
+	<license>GNU General Public License, version 3 of the license or - at your option - any later version</license>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>www.dionysopoulos.me</authorUrl>
+	<description>
+		Miniskewl is a handy system plugin which will transparently aggregate
+		and optionally gzip-compress your CSS and JS files. This will improve
+		your page load times due to the minimization of the number of HTTP
+		requests required to load it and the volume of data transferred to your
+		visitor's browser. The main difference to other aggregators/minifiers is
+		that it can deliver the minifed files without requiring a world-writable
+		and world-readable cache directory.
+	</description>
+	<files>
+		<file plugin="miniskewl">miniskewl.php</file>
+		<folder>miniskewl</folder>
+	</files>
+</install>
